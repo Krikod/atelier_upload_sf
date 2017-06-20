@@ -16,4 +16,8 @@ BlogBundle\Entity\Event:
         title:
             type: string
             length: 255
+
+    oneToOne:
+        pdf:
+            targetEntity: BlogBundle\Entity\Picture
     lifecycleCallbacks: {  }

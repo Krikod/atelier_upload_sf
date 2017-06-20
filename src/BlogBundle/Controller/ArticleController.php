@@ -46,20 +46,11 @@ class ArticleController extends Controller
 
 	        // Récupération de notre fichier envoyé dans notre formulaire
             $file = $article->getPicture()->getFile();
-            // On donne un nom unique au fichier grâce a uniqudId et on récupère l'extension
-            $fileName = uniqid() . '.' . $file->guessExtension();
-            // Définition de la balise alt
-            $altName = $file->getClientOriginalName();
+            $names = $this->get('blog.uploader')->upload($file);
 
             // Je stock les info en base de donnée
-            $article->getPicture()->setAlt($altName);
-            $article->getPicture()->setSrc($fileName);
-
-            // Upload du fichier
-            $file->move(
-            	$this->getParameter('upload_directory'),
-	            $fileName
-	            );
+            $article->getPicture()->setAlt($names["altName"]);
+            $article->getPicture()->setSrc($names["fileName"]);
 
             $em->persist($article);
             $em->flush();
