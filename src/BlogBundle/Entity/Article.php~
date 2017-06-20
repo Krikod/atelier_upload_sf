@@ -1,0 +1,18 @@
+<?php
+
+namespace BlogBundle\Entity;
+
+/**
+ * Article
+ */
+class Article
+{
+
+	public function __construct()
+	{
+		$this->date = new \DateTime();
+	}
+
+	//
+
+}

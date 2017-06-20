@@ -1,0 +1,19 @@
+BlogBundle\Entity\Event:
+    type: entity
+    table: null
+    repositoryClass: BlogBundle\Repository\EventRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        start:
+            type: datetime
+        end:
+            type: datetime
+        title:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }
