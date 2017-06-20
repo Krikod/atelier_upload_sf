@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Picture
 {
 	/**
+	 * Attribut virtuel qui accueil le fichier asisi dans notre formulaire
 	 * @var UploadedFile $file
 	 */
 	private $file;
@@ -34,16 +35,35 @@ class Picture
 	public function setFile(UploadedFile $file)
 	{
 		$this->file = $file;
+
+		if ($this->src != null){
+			// On stock le nom de l'image à supprimer
+			$this->tempName = $this->src;
+
+			// On réinitialise les champs de notre objet
+			$this->src = null;
+			$this->alt= null;
+		}
 	}
 
 	/**
+	 * Ce qu'il se passe avant l'upload
 	 * @ORM\PrePersist
+	 * @ORM\PreUpdate
 	 */
 	public function preUpload()
 	{
+		// Si jamais il n'y a pas de fichier (champ facultatif), on ne fait rien
+		if (null === $this->file) {
+			return;
+		}
+
 		// On donne un nom unique au fichier grâce a uniqudId et on récupère l'extension
 		$this->src = uniqid() . '.' . $this->file->guessExtension();
 		// Définition de la balise alt
+		// getClientOriginalName() récupère le nom complet du fichier (extension comprise)
+		// Du coup on récupère nom original + extension, et grâce à str_replace, et ré-cré un le alt du fichier avec
+		// le nom original du fichier tel qu'il etait sur la machine du client sans l'extension.
 		$alt = $this->file->getClientOriginalName();
 		$ext = $this->file->guessExtension();
 		$this->alt = str_replace('.'.$ext, '', $alt);
@@ -51,18 +71,26 @@ class Picture
 
 	/**
 	 * @ORM\PostPersist
+	 * @ORM\PostUpdate
 	 */
 	public function upload()
 	{
-		$this->file->move($this->getUploadDir(), $this->src);
-	}
+		// Si jamais il n'y a pas de fichier (champ facultatif), on ne fait rien
+		if (null === $this->file) {
+			return;
+		}
 
-	/**
-	 * @ORM\PreRemove
-	 */
-	public function preRemove()
-	{
-		$this->tempName = $this->src;
+		if ($this->tempName != null){
+			// On récupère l'adresse du fichier à supprimer
+			$oldFile = $this->getUploadDir() . $this->tempName;
+
+			// On vérifie que le fichier à supprimer exist
+			if (file_exists($oldFile)){
+				unlink($oldFile);
+			}
+		}
+
+		$this->file->move($this->getUploadDir(), $this->src);
 	}
 
 	/**
@@ -70,7 +98,13 @@ class Picture
 	 */
 	public function remove()
 	{
-		unlink($this->getUploadDir() . $this->src);
+		// On récupère l'adresse du fichier à supprimer
+		$fileToRemove = $this->getUploadDir() . $this->src;
+
+		// On vérifie que le fichier exist
+		if (file_exists($fileToRemove)){
+			unlink($fileToRemove);
+		}
 	}
 
 	private function getUploadDir()

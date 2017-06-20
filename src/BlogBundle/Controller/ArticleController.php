@@ -4,6 +4,8 @@ namespace BlogBundle\Controller;
 
 use BlogBundle\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

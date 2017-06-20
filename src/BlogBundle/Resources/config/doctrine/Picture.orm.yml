@@ -17,7 +17,13 @@ BlogBundle\Entity\Picture:
             length: 255
 
     lifecycleCallbacks:
+        # For create
         prePersist: [ preUpload ]
         postPersist: [ upload ]
+
+        # For edit
+        preUpdate: [ preUpload ]
+        postUpdate: [ upload ]
+
+        # For remove
         postRemove: [ remove ]
-        preRemove: [ preRemove ]

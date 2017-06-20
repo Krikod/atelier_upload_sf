@@ -15,6 +15,12 @@ class Picture
 	private $file;
 
 	/**
+	 * Attribut permettant de stocker le nom de mon fichier en preRemove
+	 * @var string $tempName
+	 */
+	private $tempName;
+
+	/**
 	 * @return UploadedFile
 	 */
 	public function getFile()
@@ -25,7 +31,7 @@ class Picture
 	/**
 	 * @param UploadedFile $file
 	 */
-	public function setFile($file)
+	public function setFile(UploadedFile $file)
 	{
 		$this->file = $file;
 	}
@@ -38,7 +44,9 @@ class Picture
 		// On donne un nom unique au fichier grâce a uniqudId et on récupère l'extension
 		$this->src = uniqid() . '.' . $this->file->guessExtension();
 		// Définition de la balise alt
-		$this->alt = $this->file->getClientOriginalName();
+		$alt = $this->file->getClientOriginalName();
+		$ext = $this->file->guessExtension();
+		$this->alt = str_replace('.'.$ext, '', $alt);
 	}
 
 	/**
@@ -47,6 +55,14 @@ class Picture
 	public function upload()
 	{
 		$this->file->move($this->getUploadDir(), $this->src);
+	}
+
+	/**
+	 * @ORM\PreRemove
+	 */
+	public function preRemove()
+	{
+		$this->tempName = $this->src;
 	}
 
 	/**
