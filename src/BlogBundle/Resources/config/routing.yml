@@ -2,6 +2,11 @@ blog_article:
     resource: "@BlogBundle/Resources/config/routing/article.yml"
     prefix:   /article
 
+blog_event:
+    resource: "@BlogBundle/Resources/config/routing/event.yml"
+    prefix:   /event
+
 blog_homepage:
     path:     /
     defaults: { _controller: BlogBundle:Default:index }
+

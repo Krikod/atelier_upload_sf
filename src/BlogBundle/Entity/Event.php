@@ -109,4 +109,33 @@ class Event
     {
         return $this->title;
     }
+    /**
+     * @var \BlogBundle\Entity\Picture
+     */
+    private $pdf;
+
+
+    /**
+     * Set pdf
+     *
+     * @param \BlogBundle\Entity\Picture $pdf
+     *
+     * @return Event
+     */
+    public function setPdf(\BlogBundle\Entity\Picture $pdf = null)
+    {
+        $this->pdf = $pdf;
+
+        return $this;
+    }
+
+    /**
+     * Get pdf
+     *
+     * @return \BlogBundle\Entity\Picture
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
+    }
 }

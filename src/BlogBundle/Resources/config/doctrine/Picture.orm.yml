@@ -15,3 +15,9 @@ BlogBundle\Entity\Picture:
         alt:
             type: string
             length: 255
+
+    lifecycleCallbacks:
+        prePersist: [ preUpload ]
+        postPersist: [ upload ]
+        postRemove: [ remove ]
+        preRemove: [ preRemove ]

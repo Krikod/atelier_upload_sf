@@ -39,19 +39,6 @@ class ArticleController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            //////////////////
-            // Upload section
-	        //////////////////
-
-	        // Récupération de notre fichier envoyé dans notre formulaire
-            $file = $article->getPicture()->getFile();
-            $names = $this->get('blog.uploader')->upload($file);
-
-            // Je stock les info en base de donnée
-            $article->getPicture()->setAlt($names["altName"]);
-            $article->getPicture()->setSrc($names["fileName"]);
-
             $em->persist($article);
             $em->flush();
 

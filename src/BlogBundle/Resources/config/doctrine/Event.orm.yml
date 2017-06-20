@@ -20,4 +20,5 @@ BlogBundle\Entity\Event:
     oneToOne:
         pdf:
             targetEntity: BlogBundle\Entity\Picture
+            cascade: ['all']
     lifecycleCallbacks: {  }

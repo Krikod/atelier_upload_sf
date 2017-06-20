@@ -2,11 +2,68 @@
 
 namespace BlogBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Picture
  */
 class Picture
 {
+	/**
+	 * @var UploadedFile $file
+	 */
+	private $file;
+
+	/**
+	 * @return UploadedFile
+	 */
+	public function getFile()
+	{
+		return $this->file;
+	}
+
+	/**
+	 * @param UploadedFile $file
+	 */
+	public function setFile($file)
+	{
+		$this->file = $file;
+	}
+
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function preUpload()
+	{
+		// On donne un nom unique au fichier grâce a uniqudId et on récupère l'extension
+		$this->src = uniqid() . '.' . $this->file->guessExtension();
+		// Définition de la balise alt
+		$this->alt = $this->file->getClientOriginalName();
+	}
+
+	/**
+	 * @ORM\PostPersist
+	 */
+	public function upload()
+	{
+		$this->file->move($this->getUploadDir(), $this->src);
+	}
+
+	/**
+	 * @ORM\PostRemove
+	 */
+	public function remove()
+	{
+		unlink($this->getUploadDir() . $this->src);
+	}
+
+	private function getUploadDir()
+	{
+		return __DIR__ . '/../../../web/uploads/images/';
+	}
+
+	// GENERATED CODE
+
     /**
      * @var int
      */
