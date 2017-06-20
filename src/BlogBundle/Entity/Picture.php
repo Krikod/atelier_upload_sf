@@ -2,11 +2,36 @@
 
 namespace BlogBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Picture
  */
 class Picture
 {
+	/**
+	 * @var UploadedFile $file
+	 */
+	private $file;
+
+	/**
+	 * @return UploadedFile
+	 */
+	public function getFile()
+	{
+		return $this->file;
+	}
+
+	/**
+	 * @param UploadedFile $file
+	 */
+	public function setFile($file)
+	{
+		$this->file = $file;
+	}
+
+	//
+
     /**
      * @var int
      */

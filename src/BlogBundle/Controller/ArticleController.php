@@ -39,6 +39,28 @@ class ArticleController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            //////////////////
+            // Upload section
+	        //////////////////
+
+	        // Récupération de notre fichier envoyé dans notre formulaire
+            $file = $article->getPicture()->getFile();
+            // On donne un nom unique au fichier grâce a uniqudId et on récupère l'extension
+            $fileName = uniqid() . '.' . $file->guessExtension();
+            // Définition de la balise alt
+            $altName = $file->getClientOriginalName();
+
+            // Je stock les info en base de donnée
+            $article->getPicture()->setAlt($altName);
+            $article->getPicture()->setSrc($fileName);
+
+            // Upload du fichier
+            $file->move(
+            	$this->getParameter('upload_directory'),
+	            $fileName
+	            );
+
             $em->persist($article);
             $em->flush();
 

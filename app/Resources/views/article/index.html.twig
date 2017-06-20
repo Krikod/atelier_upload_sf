@@ -10,6 +10,7 @@
                 <th>Title</th>
                 <th>Content</th>
                 <th>Date</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,6 +21,7 @@
                 <td>{{ article.title }}</td>
                 <td>{{ article.content }}</td>
                 <td>{% if article.date %}{{ article.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td><img width="200" src="{{ asset('uploads/images/' ~ article.picture.src) }}" alt="{{ article.picture.alt }}"></td>
                 <td>
                     <ul>
                         <li>
